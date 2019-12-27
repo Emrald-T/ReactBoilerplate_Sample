@@ -25,8 +25,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { editEmployeeData } from 'containers/Home/actions';
-import { makeSelectEmpData } from 'containers/Home/selectors';
+import { editEmployeeData } from 'containers/HomePage/actions';
+import { makeSelectEmpData } from 'containers/HomePage/selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';

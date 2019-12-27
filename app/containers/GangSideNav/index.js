@@ -22,7 +22,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { makeSelectTabOpen } from './selectors';
 import messages from './messages';
-import { openSideNav, setGangFilter } from '../Home/actions';
+import { openSideNav, setGangFilter } from '../HomePage/actions';
 
 const drawerWidth = 240;
 

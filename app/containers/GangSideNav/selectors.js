@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { initialState } from '../Home/reducer';
+import { initialState } from '../HomePage/reducer';
 
 /**
  * Direct selector to the gangSideNav state domain
