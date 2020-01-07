@@ -17,3 +17,4 @@ export const CHANGE_TAB = 'app/Tabs/CHANGE_TAB';
 export const GET_EMPDATA = 'app/EmpTable/GET_EMPDATA';
 export const SET_EMPDATA = 'app/EmpTable/SET_EMPDATA';
 export const EDIT_EMPDATA = 'app/EmpTable/EDIT_EMPDATA';
+export const SEARCH_EMPDATA = 'app/EmpTable/SEARCH_EMPDATA';

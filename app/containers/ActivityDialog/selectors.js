@@ -1,13 +1,10 @@
 import { createSelector } from 'reselect';
-import { initialState } from './reducer';
 
 /**
  * Direct selector to the activityDialog state domain
  */
 
 const selectHomeState = state => state.home;
-const selectActivityDialogDomain = state =>
-  state.activityDialog || initialState;
 
 /**
  * Other specific selectors
@@ -29,5 +26,4 @@ const makeSelectProjectData = () =>
     homeState => (homeState ? homeState.projectData : []),
   );
 
-export default selectActivityDialogDomain;
 export { makeSelectProjects, makeSelectProjectData };
