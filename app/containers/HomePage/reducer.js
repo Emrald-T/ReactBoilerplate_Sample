@@ -14,6 +14,7 @@ import {
   GET_EMPDATA,
   SET_EMPDATA,
   EDIT_EMPDATA,
+  SEARCH_EMPDATA,
 } from './constants';
 
 export const initialState = {
@@ -66,6 +67,7 @@ const homeReducer = (state = initialState, action) =>
           draft.projects.splice(index, 1);
           draft.projectData.splice(index, 1);
         }
+        if (draft.projects.length === 0) draft.searchValue = '';
         break;
       }
       case CHANGE_TAB:
@@ -87,9 +89,6 @@ const homeReducer = (state = initialState, action) =>
           data[i].OldSt = data[i].St;
           data[i].OldOt = data[i].Ot;
           data[i].OldDt = data[i].Dt;
-          data[i].invalidSt = false;
-          data[i].invalidOt = false;
-          data[i].invalidDt = false;
           data[i].initData = true;
         }
         draft.loading = false;
@@ -97,18 +96,30 @@ const homeReducer = (state = initialState, action) =>
         break;
       }
       case EDIT_EMPDATA: {
-        const { data } = action;
-        // if (
-        //   data.OldSt === data.St &&
-        //   data.OldOt === data.Ot &&
-        //   data.OldDt === data.Dt
-        // ) {
-        //   data.initData = true;
-        // } else {
-        //   data.initData = false;
-        // }
-        draft.empData[action.key] = data;
+        const { key, data } = action;
+        // Check if the data has been changed
+        if (
+          data.OldSt === data.St &&
+          data.OldOt === data.Ot &&
+          data.OldDt === data.Dt
+        ) {
+          data.initData = true;
+        } else {
+          data.initData = false;
+        }
+        // Find the entry in the list and set data
+        const results = [].concat(draft.empData[key]);
+        for (let i = results.length - 1; i >= 0; i--) {
+          if (results[i].Empno === data.Empno) {
+            results[i] = data;
+            break;
+          }
+        }
+        draft.empData[key] = results;
         break;
+      }
+      case SEARCH_EMPDATA: {
+        draft.searchValue = action.value;
       }
     }
   });

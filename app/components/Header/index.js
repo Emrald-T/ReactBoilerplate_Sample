@@ -16,9 +16,6 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     backgroundColor: green[500],
-    '&:hover': {
-      backgroundColor: green[600],
-    },
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,

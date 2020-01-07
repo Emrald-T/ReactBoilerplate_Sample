@@ -13,6 +13,7 @@ import {
   GET_EMPDATA,
   SET_EMPDATA,
   EDIT_EMPDATA,
+  SEARCH_EMPDATA,
 } from './constants';
 
 export function openSideNav() {
@@ -67,5 +68,12 @@ export function editEmployeeData(key, data) {
     type: EDIT_EMPDATA,
     key,
     data,
+  };
+}
+
+export function searchEmployee(value) {
+  return {
+    type: SEARCH_EMPDATA,
+    value,
   };
 }

@@ -13,66 +13,51 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
-// import TextField from '@material-ui/core/TextField';
-import HoursInput from 'components/HoursInput';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
+import CommentIcon from '@material-ui/icons/Comment';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { makeStyles } from '@material-ui/core/styles';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
+import HoursInput from 'components/HoursInput';
 import { editEmployeeData } from 'containers/HomePage/actions';
-import { makeSelectEmpData } from 'containers/HomePage/selectors';
-import reducer from './reducer';
-import saga from './saga';
+import {
+  makeSelectEmpData,
+  makeSelectSearchValue,
+} from 'containers/HomePage/selectors';
 import messages from './messages';
 
 const useStyles = makeStyles(() => ({
   table: {
-    minWidth: 700,
+    minWidth: 740,
   },
 }));
 
 export function EmployeeTable(props) {
-  useInjectReducer({ key: 'employeeTable', reducer });
-  useInjectSaga({ key: 'employeeTable', saga });
-
   const classes = useStyles();
 
-  const [localData, setLocalData] = React.useState(props.data);
-
-  const handleValueChange = (sourceData, index) => {
-    props.onEdit(props.tab, props.data);
-    setLocalData(props.data);
+  const handleValueChange = sourceData => {
+    props.onEdit(props.tab, sourceData);
   };
 
-  // const data = data ? props.data[props.tab] : [];
-
-  // <TextField
-  //   error={emp.invalidSt}
-  //   type="number"
-  //   variant="standard"
-  //   defaultValue={emp.St.toFixed(2)}
-  //   onChange={e =>
-  //     handleValueChange(e, { index, type: 'St', data: emp })
-  //   }
-  //   helperText={emp.invalidSt ? 'Value is greater than 24' : ''}
-  //   aria-describedby="ST hours input"
-  // />
-
   const DataRows = () => {
-    let list;
+    let items;
+    let data;
     if (props.data.length) {
-      if (localData.length) {
-        list = localData;
-      } else {
-        list = props.data;
-      }
-      list = list.map((emp, index) => (
+      /* eslint-disable array-callback-return, consistent-return */
+      data = props.data.filter(item => {
+        const value = props.searchValue ? props.searchValue.toUpperCase() : '';
+        if (
+          item.Ename.toUpperCase().includes(value) ||
+          item.Empno.toUpperCase().includes(value)
+        )
+          return item;
+      });
+      items = data.map(emp => (
         <TableRow key={emp.Empno}>
           <TableCell>
             <div>{emp.Ename}</div>
@@ -84,34 +69,30 @@ export function EmployeeTable(props) {
             </Link>
           </TableCell>
           <TableCell colSpan={2} align="center">
-            <HoursInput
-              type="St"
-              data={emp}
-              handleChange={e => handleValueChange(e, index)}
-            />
+            <HoursInput type="St" data={emp} handleChange={handleValueChange} />
+            <Typography />
           </TableCell>
           <TableCell colSpan={2} align="center">
-            <HoursInput
-              type="Ot"
-              data={emp}
-              handleChange={e => handleValueChange(e, index)}
-            />
+            <HoursInput type="Ot" data={emp} handleChange={handleValueChange} />
           </TableCell>
           <TableCell colSpan={2} align="center">
-            <HoursInput
-              type="Dt"
-              data={emp}
-              handleChange={e => handleValueChange(e, index)}
-            />
+            <HoursInput type="Dt" data={emp} handleChange={handleValueChange} />
           </TableCell>
           <TableCell align="center">{emp.Total.toFixed(2)}</TableCell>
           <TableCell align="center">
-            <Button>Notes</Button>
+            <IconButton color="inherit" aria-label="show notes" edge="end">
+              <Icon
+                component={CommentIcon}
+                color="primary"
+                title="Comments"
+                size={1}
+              />
+            </IconButton>
           </TableCell>
         </TableRow>
       ));
     } else {
-      list = (
+      items = (
         <TableRow>
           <TableCell colSpan={9} align="center">
             <FormattedMessage {...messages.noData} />
@@ -119,7 +100,7 @@ export function EmployeeTable(props) {
         </TableRow>
       );
     }
-    return list;
+    return items;
   };
 
   return (
@@ -157,17 +138,18 @@ EmployeeTable.propTypes = {
   dispatch: PropTypes.func.isRequired,
   tab: PropTypes.string,
   data: PropTypes.array,
+  searchValue: PropTypes.string,
   onEdit: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   data: makeSelectEmpData(),
+  searchValue: makeSelectSearchValue(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    // onEdit: (key, pos, data) => dispatch(editEmployeeData(key, pos, data)),
     onEdit: (key, data) => {
       dispatch(editEmployeeData(key, data));
     },

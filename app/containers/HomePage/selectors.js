@@ -46,10 +46,17 @@ const makeSelectCurrentTab = () =>
     },
   );
 
+const makeSelectSearchValue = () =>
+  createSelector(
+    homeState,
+    state => state.searchValue,
+  );
+
 export {
   makeSelectEmpData,
   makeSelectAllEmpData,
   makeSelectProjects,
   makeSelectProjectData,
   makeSelectCurrentTab,
+  makeSelectSearchValue,
 };
