@@ -31,6 +31,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
+import { Link } from 'react-router-dom';
 
 import Header from 'components/Header';
 import GangSideNav from 'containers/GangSideNav';
@@ -196,8 +197,8 @@ function HomePage(props) {
 
   const actions = [
     { icon: <PostAddIcon />, name: 'Add Project', onClick: handleOpen },
-    { icon: <SaveIcon />, name: 'Save', onClick: handleOpen },
-    { icon: <RateReviewIcon />, name: 'Review and Post', onClick: handleOpen },
+    { icon: <SaveIcon />, name: 'Save', onClick: () => {} },
+    { icon: <RateReviewIcon />, name: 'Review and Post', onClick: () => {} },
   ];
 
   // When project tabs are availble initially, load the table data
@@ -324,7 +325,7 @@ function HomePage(props) {
           onClose={e => {
             handleClose(e, 'speed-dial');
           }}
-          onClick={handleOpenSD}
+          onOpen={handleOpenSD}
           open={openSD}
         >
           {actions.map(action => (
@@ -333,6 +334,11 @@ function HomePage(props) {
               icon={action.icon}
               tooltipTitle={action.name}
               tooltipOpen
+              FabProps={
+                action.name === 'Save'
+                  ? { component: Link, to: '/features' }
+                  : {}
+              }
               onClick={e => {
                 handleClose(e, 'speed-dial');
                 action.onClick();
