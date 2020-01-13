@@ -13,7 +13,8 @@ import { Switch, Route } from 'react-router-dom';
 
 // import Home from 'containers/Home/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
-import FeaturePage from 'containers/FeaturePage/Loadable';
+import ReviewPage from 'containers/ReviewPage';
+// import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 import GlobalStyle from '../../global-styles';
@@ -37,7 +38,7 @@ export default function App() {
       </Helmet>
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route path="/features" component={FeaturePage} />
+        <Route path="/review" component={ReviewPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

@@ -335,8 +335,8 @@ function HomePage(props) {
               tooltipTitle={action.name}
               tooltipOpen
               FabProps={
-                action.name === 'Save'
-                  ? { component: Link, to: '/features' }
+                action.name === 'Review and Post'
+                  ? { component: Link, to: '/review' }
                   : {}
               }
               onClick={e => {
