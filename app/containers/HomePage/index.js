@@ -31,6 +31,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
+import { Link } from 'react-router-dom';
 
 import Header from 'components/Header';
 import GangSideNav from 'containers/GangSideNav';
@@ -87,13 +88,6 @@ const useStyles = makeStyles(theme => ({
       position: 'fixed',
     },
   },
-  // fabGreen: {
-  //   color: theme.palette.common.white,
-  //   backgroundColor: green[500],
-  //   '&:hover': {
-  //     backgroundColor: green[600],
-  //   },
-  // },
   content: {
     flexGrow: 1,
     width: '100%',
@@ -122,6 +116,7 @@ const useStyles = makeStyles(theme => ({
   tabs: {
     transition: 'background-color 150ms ease',
     maxWidth: '300px',
+    padding: '0 12px',
     '&:hover': {
       backgroundColor: '#e2e2e2',
       '& svg': {
@@ -131,8 +126,11 @@ const useStyles = makeStyles(theme => ({
   },
   tabLabel: {
     width: '100%',
+    padding: '10px 0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     '& > h6': {
-      float: 'left',
       width: '7em',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
@@ -140,13 +138,14 @@ const useStyles = makeStyles(theme => ({
     },
   },
   closeBtn: {
-    fontSize: '16px',
-    margin: '5px auto',
-    float: 'right',
+    fontSize: '1.5em',
     opacity: 0,
+    padding: '2px',
+    borderRadius: '50%',
     transition: 'opacity 0.15s ease',
     '&:hover': {
       opacity: 1,
+      background: 'darkgray',
     },
   },
   tabPanels: {
@@ -200,11 +199,6 @@ function HomePage(props) {
     { icon: <RateReviewIcon />, name: 'Review and Post', onClick: handleOpen },
   ];
 
-  // When project tabs are availble initially, load the table data
-  // useEffect(() => {
-  //   if (props.projects.length > 0) props.getEmployeeData();
-  // }, []);
-
   return (
     <div className={classes.root}>
       <Helmet>
@@ -257,17 +251,17 @@ function HomePage(props) {
                       <Tab
                         key={item}
                         label={
-                          <span className={classes.tabLabel}>
-                            <Tooltip title={item}>
+                          <Tooltip title={item}>
+                            <div className={classes.tabLabel}>
                               <Typography variant="subtitle1">
                                 {item}
                               </Typography>
-                            </Tooltip>
-                            <CloseIcon
-                              className={classes.closeBtn}
-                              onClick={handleTabClose}
-                            />
-                          </span>
+                              <CloseIcon
+                                className={classes.closeBtn}
+                                onClick={handleTabClose}
+                              />
+                            </div>
+                          </Tooltip>
                         }
                         value={`${item}`}
                         id={`tab-${index}`}
@@ -292,9 +286,7 @@ function HomePage(props) {
                   <Typography>
                     Type - {itemData.OrderType}
                     <br />
-                    Description -&nbsp;
-                    {itemData.OrderDesc ||
-                      `${itemData.NwDesc}::${itemData.ActDesc}`}
+                    Description -&nbsp; {itemData.ProjDesc}
                   </Typography>
                   <SearchBar
                     placeholder="Search Employee name or number..."
@@ -309,11 +301,15 @@ function HomePage(props) {
         ) : (
           ''
         )}
-        <ActivityDialog
-          open={openDialog}
-          onClose={handleClose}
-          onSelectionComplete={props.addProject}
-        />
+        {openDialog ? (
+          <ActivityDialog
+            open={openDialog}
+            onClose={handleClose}
+            onSelectionComplete={props.addProject}
+          />
+        ) : (
+          ''
+        )}
       </main>
       <div className={openSD ? classes.spdButton : ''}>
         <Backdrop open={openSD} />
@@ -332,6 +328,11 @@ function HomePage(props) {
               key={action.name}
               icon={action.icon}
               tooltipTitle={action.name}
+              FabProps={
+                action.name.includes('Review')
+                  ? { component: Link, to: '/features' }
+                  : {}
+              }
               tooltipOpen
               onClick={e => {
                 handleClose(e, 'speed-dial');
@@ -344,15 +345,6 @@ function HomePage(props) {
     </div>
   );
 }
-
-// <Fab
-//   aria-label="Add Project"
-//   className={`${classes.fab} ${classes.fabGreen}`}
-//   color="inherit"
-//   onClick={handleClickOpen}
-// >
-//   <AddIcon />
-// </Fab>
 
 HomePage.propTypes = {
   projects: PropTypes.array,
