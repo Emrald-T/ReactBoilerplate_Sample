@@ -1,10 +1,11 @@
 import { createSelector } from 'reselect';
+import { initialState } from './reducer';
 
 /**
  * Direct selector to the activityDialog state domain
  */
 
-const selectHomeState = state => state.home;
+const selectActState = state => state.projectsDialog || initialState;
 
 /**
  * Other specific selectors
@@ -14,16 +15,44 @@ const selectHomeState = state => state.home;
  * Default selector used by ActivityDialog
  */
 
-const makeSelectProjects = () =>
+const getSlctdProjects = () =>
   createSelector(
-    selectHomeState,
-    homeState => (homeState ? homeState.projects : []),
+    selectActState,
+    state => state.slctdProjects,
   );
 
-const makeSelectProjectData = () =>
+const getSlctdProjectData = () =>
   createSelector(
-    selectHomeState,
-    homeState => (homeState ? homeState.projectData : []),
+    selectActState,
+    state => state.slctdProjectData,
   );
 
-export { makeSelectProjects, makeSelectProjectData };
+const getProjectData = () =>
+  createSelector(
+    selectActState,
+    state => state.projectData,
+  );
+
+const getRequestCompleted = () =>
+  createSelector(
+    selectActState,
+    state => state.fetchComplete,
+  );
+
+const getProjectTree = () =>
+  createSelector(
+    selectActState,
+    state => ({
+      success: state.fetchSuccess,
+      message: state.message,
+      tree: state.projectTree,
+    }),
+  );
+
+export {
+  getSlctdProjects,
+  getSlctdProjectData,
+  getProjectTree,
+  getProjectData,
+  getRequestCompleted,
+};
